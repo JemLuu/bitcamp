@@ -1,0 +1,209 @@
+/* Base styles and CSS variables */
+:root {
+  --primary-blue: #0066cc;
+  --dark-blue: #004c99;
+  --light-blue: #e6f0ff;
+  --black: #1a1a1a;
+  --white: #ffffff;
+  --error: #cc0000;
+  --success: #006600;
+  --transition: all 0.3s ease;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  background-color: var(--light-blue);
+  color: var(--black);
+}
+
+/* Focus styles */
+*:focus {
+  outline: 3px solid var(--primary-blue);
+  outline-offset: 2px;
+  transition: outline-offset 0.2s ease;
+}
+
+/* Button styles */
+.button {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  padding: 1.25rem;
+  font-size: 1.25rem;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 0.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background-color: var(--dark-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Status messages */
+.status {
+  font-size: 1.25rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 8px;
+  animation: slideUp 0.3s ease-out;
+}
+
+.status.error {
+  background-color: var(--error);
+  color: var(--white);
+}
+
+.status.success {
+  background-color: var(--success);
+  color: var(--white);
+}
+
+/* Main container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Logo styles */
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--primary-blue);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.logo svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* Camera container and preview */
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.camera-preview {
+  width: 100%;
+  height: auto;
+  display: block;
+  background-color: var(--black);
+  transform: scaleX(-1); /* Mirror the camera preview */
+}
+
+/* Button container */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1rem;
+  background: var(--primary-blue);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.skip-link:focus {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .button {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .logo {
+    font-size: 2rem;
+  }
+
+  .camera-container {
+    border-radius: 12px;
+  }
+}
