@@ -9,9 +9,8 @@ def encode_image(image_path):
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 # send image to ChatGPT and return descriptor text
-def process_image():
-    # TODO: get from frontend
-    image_path = "../ducks.jpeg"
+def process_image(image_path):
+    # image_path = "../ducks.jpeg"
 
     base64_image = encode_image(image_path)
 
@@ -33,8 +32,8 @@ def process_image():
     response.output_text
 
 # send descriptor text to TTS api
-def tts():
+def tts(audio_path):
     # TODO: 
     return None
 
-process_image()
+# process_image("../ducks.jpeg")
