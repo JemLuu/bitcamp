@@ -13,6 +13,7 @@ def encode_image(image_path):
 
 # send image to ChatGPT and return descriptor text
 def process_image(image_path):
+    global context
     # image_path = "../ducks.jpeg"
 
     base64_image = encode_image(image_path)

@@ -78,7 +78,7 @@ function App() {
     canvas.height = video.videoHeight;
 
     // Draw video frame to canvas with horizontal flip
-    context.scale(-1, 1); // Flip horizontally
+    // context.scale(-1, 1); // Flip horizontally
     context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
     context.scale(-1, 1); // Reset transform
 
@@ -94,8 +94,9 @@ function App() {
       playSound("/440.mp3");
       setStatus('Sending photo for description...');
 
+      const NGROK_URL = import.meta.env.VITE_NGROK_URL;
       // Send to backend
-      const response = await fetch('http://127.0.0.1:5000/upload-image', {
+      const response = await fetch(`${NGROK_URL}/upload-image`, {
         method: 'POST',
         body: formData,
       });

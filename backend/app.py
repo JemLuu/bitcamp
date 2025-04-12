@@ -43,17 +43,19 @@ def upload_image():
         description = process_image(image_path)
         tts(description, audio_path)
 
-        return send_file(audio_path, mimetype='audio/mpeg')
-
         @after_this_request
-        def remove_file():
+        def remove_file(response):
             try:
                 os.remove(audio_path)
-            except:
-                pass
+            except Exception as cleanup_error:
+                print("Cleanup error:", cleanup_error)
             return response
+        
+        return send_file(audio_path, mimetype='audio/mpeg')
+
 
     except Exception as e:
+        print("Error in upload-image:", e)
         return jsonify({"error": str(e)}), 500
 
     finally:
