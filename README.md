@@ -16,7 +16,15 @@ Web app for mobile use to narrate camera feed
     * npm install
         * might have to npm audit
     * npm run dev
-* Terminal 3 (need ngrok downloaded):
-    * ngrok http 5173 
-        * Make sure 5173 is the correct point as your frontend (should be)
-    * https://__________.ngrok-free.app/upload-image is the website
+* Terminal 3 (npm install -g localtunnel)
+    * Run: npx localtunnel --port 5173
+        * This will give a tunnel for the frontend
+        * It will give you a URL. This is the URL you go on to your phone
+        * The IP Password is at https://loca.lt/mytunnelpassword on your computer
+* Terminal 4 (need ngrok downloaded):
+    * ngrok http 5000 
+        * This is the HTTPS tunnel for the backend! 
+    * Create a .env file in the /frontend/EchoLens folder
+    * Add this to the .env: VITE_NGROK_URL=https://whatever_you_get.ngrok-free.app
+
+After all this, you should be good to go.
