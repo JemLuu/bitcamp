@@ -4,6 +4,7 @@ from pathlib import Path
 from openai import OpenAI
 
 client = OpenAI()
+context = ""
 
 # Function to encode the image
 def encode_image(image_path):
@@ -22,7 +23,7 @@ def process_image(image_path):
             {
                 "role": "user",
                 "content": [
-                    { "type": "input_text", "text": "how would you describe what you are seeing to a blind person? limit your response to two sentences. start with 'there is...' " },
+                    { "type": "input_text", "text": generate_text() },
                     {
                         "type": "input_image",
                         "image_url": f"data:image/jpeg;base64,{base64_image}",
@@ -31,6 +32,8 @@ def process_image(image_path):
             }
         ],
     )
+
+    context += response.output_text
     return response.output_text
 
 # send descriptor text to TTS api
@@ -43,6 +46,17 @@ def tts(description, audio_path):
     ) as response:
         response.stream_to_file(audio_path)
     return None
+
+def generate_text():
+    return f"""You are a helpful assistant describing important visual details (included in photo) to a visually impaired user. 
+    Speak directly to the listener, like a live narrator. 
+    Only describe what has changed, moved, or become relevant since the last frame — avoid repeating what’s already been described.  
+    Be concise: just a few natural phrases or a short sentence.  
+    You’ve already said:  
+    \"{context}\"  
+    Now, continue the narration with what’s happening right now in the latest frame.  
+    Don’t use words like "image", "photo", or "picture". If only one person is present, you don’t need to identify them each time.
+    """
 
 '''
 UPLOAD_FOLDER = 'temp_uploads'
