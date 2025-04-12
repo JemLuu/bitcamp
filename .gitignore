@@ -2,3 +2,4 @@ venv/
 env/
 .envgi
 .venv/
+__pycache__/
