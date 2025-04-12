@@ -31,7 +31,7 @@ function App() {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        speak('Camera initialized. Ready to capture images.');
+        speak('Camera On');
       }
     } catch (err) {
       setError('Failed to access camera. Please ensure camera permissions are granted.');
@@ -69,9 +69,7 @@ function App() {
       // Create form data
       const formData = new FormData();
       formData.append('image', blob, 'photo.jpg');
-      if (!isCapturing){
-        speak('Photo captured. Sending for description.');
-      }
+      playSound();
       setStatus('Sending photo for description...');
 
       // Send to backend
@@ -102,6 +100,11 @@ function App() {
   const toggleCapture = () => {
     setIsCapturing(prev => !prev);
     speak(isCapturing ? 'Automatic capture stopped' : 'Automatic capture started');
+  };
+
+  const playSound = () => {
+    const audio = new Audio('../public/440.mp3'); // path is relative to the public folder
+    audio.play();
   };
 
   // Focus first interactive element on load
