@@ -1,4 +1,6 @@
 import base64
+import os, uuid
+from pathlib import Path
 from openai import OpenAI
 
 client = OpenAI()
@@ -29,11 +31,27 @@ def process_image(image_path):
             }
         ],
     )
-    response.output_text
+    return response.output_text
 
 # send descriptor text to TTS api
-def tts(audio_path):
-    # TODO: 
+def tts(description, audio_path):
+    with client.audio.speech.with_streaming_response.create(
+        model="gpt-4o-mini-tts",
+        voice="onyx",
+        input=description,
+        instructions="Speak in a cheerful and positive tone.",
+    ) as response:
+        response.stream_to_file(audio_path)
     return None
 
-# process_image("../ducks.jpeg")
+'''
+UPLOAD_FOLDER = 'temp_uploads'
+AUDIO_FOLDER = 'temp_audio'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(AUDIO_FOLDER, exist_ok=True)
+image_id = str(uuid.uuid4())
+image_path = os.path.join(UPLOAD_FOLDER, f"{image_id}.jpg")
+audio_path = os.path.join(AUDIO_FOLDER, f"{image_id}.mp3")
+# print(process_image("../ducks.jpeg"))
+tts(process_image("../ducks.jpeg"), audio_path)
+'''

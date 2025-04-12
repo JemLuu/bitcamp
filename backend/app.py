@@ -1,19 +1,29 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, after_this_request
 import os
 import uuid
 from util import process_image, tts
 
 app = Flask(__name__)
+
+# make folder
 UPLOAD_FOLDER = 'temp_uploads'
 AUDIO_FOLDER = 'temp_audio'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(AUDIO_FOLDER, exist_ok=True)
 
+# test endpoint
 @app.route('/data', methods=['GET'])
 def get_data():
     data = {'message': 'Hello from Flask!'}
     return jsonify(data)
 
+'''
+@app.route('/test', methods=['GET'])
+def test_data():
+    return None
+'''
+
+# upload endpoint
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
     if 'image' not in request.files:
@@ -29,8 +39,16 @@ def upload_image():
 
         description = process_image(image_path)
         tts(description, audio_path)
-        
+
         return send_file(audio_path, mimetype='audio/mpeg')
+
+        @after_this_request
+        def remove_file():
+            try:
+                os.remove(audio_path)
+            except:
+                pass
+            return response
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
