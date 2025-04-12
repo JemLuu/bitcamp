@@ -69,17 +69,18 @@ function App() {
       // Create form data
       const formData = new FormData();
       formData.append('image', blob, 'photo.jpg');
-
-      speak('Photo captured. Sending for description.');
+      if (!isCapturing){
+        speak('Photo captured. Sending for description.');
+      }
       setStatus('Sending photo for description...');
 
       // Send to backend
-      const response = await fetch('/api/describe', {
+      const response = await fetch('http://127.0.0.1:5000/upload-image', {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Failed to get description');
+      if (!response.ok) throw new Error('Failed to get description'); // dies here
 
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
@@ -87,7 +88,6 @@ function App() {
       if (audioRef.current) {
         audioRef.current.src = audioUrl;
         audioRef.current.play();
-        speak('Description received. Playing audio.');
         setStatus('Description received');
       }
     } catch (err) {
@@ -114,14 +114,17 @@ function App() {
     initializeCamera();
   }, []);
 
-  // Handle automatic capture
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+  
     if (isCapturing) {
+      // 👇 Capture once immediately
+      capturePhoto();
+  
+      // 👇 Then every 15 seconds
       interval = setInterval(capturePhoto, 15000);
     }
-
+  
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -136,7 +139,7 @@ function App() {
       <main id="main" className="container">
         <div className="logo" role="banner">
           <Eye aria-hidden="true" />
-          <span>SeeForMe</span>
+          <span>EchoLens</span>
         </div>
         
         <div role="status" aria-live="polite">

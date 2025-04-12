@@ -2,8 +2,11 @@ from flask import Flask, request, send_file, jsonify, after_this_request
 import os
 import uuid
 from util import process_image, tts
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # make folder
 UPLOAD_FOLDER = 'temp_uploads'
