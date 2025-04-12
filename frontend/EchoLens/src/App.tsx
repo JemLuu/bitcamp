@@ -21,21 +21,43 @@ function App() {
   const initializeCamera = async () => {
     try {
       const constraints = {
+        audio: false,
         video: {
-          facingMode: 'user', // Changed to front-facing camera
+          facingMode: { exact: 'environment' }, // 👈 prefer rear camera
           width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
+          height: { ideal: 720 },
+        },
       };
-      
+  
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        speak('Camera On');
+        playSound("/camera_on.mp3");
       }
     } catch (err) {
-      setError('Failed to access camera. Please ensure camera permissions are granted.');
-      speak('Camera access denied. Please check your permissions.');
+      console.warn("Rear camera not available or denied. Falling back to any available video stream.");
+  
+      try {
+        const fallbackConstraints = {
+          video: {
+            facingMode: 'environment', // 👈 looser fallback
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+        };
+  
+        const fallbackStream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+  
+        if (videoRef.current) {
+          videoRef.current.srcObject = fallbackStream;
+          playSound("/camera_on.mp3");
+        }
+      } catch (fallbackError) {
+        console.error("Camera fallback also failed:", fallbackError);
+        setError('Failed to access camera. Please ensure camera permissions are granted.');
+        speak('Camera access denied. Please check your permissions.');
+      }
     }
   };
 
@@ -69,7 +91,7 @@ function App() {
       // Create form data
       const formData = new FormData();
       formData.append('image', blob, 'photo.jpg');
-      playSound();
+      playSound("/440.mp3");
       setStatus('Sending photo for description...');
 
       // Send to backend
@@ -78,7 +100,7 @@ function App() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error('Failed to get description'); // dies here
+      if (!response.ok) throw new Error('Failed to get description'); 
 
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
@@ -90,7 +112,7 @@ function App() {
       }
     } catch (err) {
       setError('Failed to get description. Please try again.');
-      speak('Error getting description. Please try again.');
+      playSound("/err_desc.mp3");
     } finally {
       setIsLoading(false);
     }
@@ -99,11 +121,15 @@ function App() {
   // Toggle automatic capture
   const toggleCapture = () => {
     setIsCapturing(prev => !prev);
-    speak(isCapturing ? 'Automatic capture stopped' : 'Automatic capture started');
+    if (isCapturing) {
+      playSound("/auto_stop.mp3");
+    } else {
+      playSound("/auto_started.mp3");
+    }
   };
 
-  const playSound = () => {
-    const audio = new Audio('../public/440.mp3'); // path is relative to the public folder
+  const playSound = (path: string) => {
+    const audio = new Audio(path);
     audio.play();
   };
 
