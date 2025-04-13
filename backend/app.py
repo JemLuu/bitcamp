@@ -43,13 +43,13 @@ def upload_image():
         description = process_image(image_path)
         tts(description, audio_path)
 
-        @after_this_request
-        def remove_file(response):
-            try:
-                os.remove(audio_path)
-            except Exception as cleanup_error:
-                print("Cleanup error:", cleanup_error)
-            return response
+        # @after_this_request
+        # def remove_file(response):
+        #     try:
+        #         os.remove(audio_path)
+        #     except Exception as cleanup_error:
+        #         print("Cleanup error:", cleanup_error)
+        #     return response
         
         return send_file(audio_path, mimetype='audio/mpeg')
 

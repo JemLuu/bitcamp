@@ -78,7 +78,7 @@ function App() {
     canvas.height = video.videoHeight;
 
     // Draw video frame to canvas with horizontal flip
-    // context.scale(-1, 1); // Flip horizontally
+    context.scale(-1, 1); // Flip horizontally
     context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
     context.scale(-1, 1); // Reset transform
 

@@ -125,7 +125,7 @@ body {
   height: auto;
   display: block;
   background-color: var(--black);
-  transform: scaleX(-1); /* Mirror the camera preview */
+  transform: scaleX(1); /* Mirror the camera preview */
 }
 
 /* Button container */
@@ -205,5 +205,6 @@ body {
 
   .camera-container {
     border-radius: 12px;
+    height: 60vh;
   }
 }

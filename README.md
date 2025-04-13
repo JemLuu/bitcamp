@@ -17,7 +17,7 @@ Web app for mobile use to narrate camera feed
         * might have to npm audit
     * npm run dev
 * Terminal 3 (npm install -g localtunnel)
-    * Run: npx localtunnel --port 5173
+    * Run: npx localtunnel --port 5173 --subdomain echolens1234
         * This will give a tunnel for the frontend
         * It will give you a URL. This is the URL you go on to your phone
         * The IP Password is at https://loca.lt/mytunnelpassword on your computer
