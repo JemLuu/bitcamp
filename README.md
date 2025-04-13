@@ -27,4 +27,5 @@ Web app for mobile use to narrate camera feed
     * Create a .env file in the /frontend/EchoLens folder
     * Add this to the .env: VITE_NGROK_URL=https://whatever_you_get.ngrok-free.app
 
+AFTERNOTE: NGROK FIRST
 After all this, you should be good to go.
